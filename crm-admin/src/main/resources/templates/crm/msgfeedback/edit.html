@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改反馈建议')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-msgfeedback-edit" th:object="${crmMsgFeedback}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">反馈标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" th:field="*{title}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">反馈主体：</label>
+                <div class="col-sm-8">
+                    <input name="msg" th:field="*{msg}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">反馈人：</label>
+                <div class="col-sm-8">
+                    <select id="addresseeId" name="addresseeId" class="form-control" required>
+                        <option value="">--请选择反馈人其中一个信息--</option>
+                        <optgroup label="--请选择反馈人用户名--">
+                            <option th:each="msgCt:${msgCt}" th:text="${msgCt.loginName}" th:value="${msgCt.id}" th:selected="*{ctName}==${msgCt.loginName}?true:false " ></option>
+                        </optgroup>
+                        <optgroup label="--请选择反馈人姓名--">
+                            <option th:each="msgCt:${msgCt}" th:text="${msgCt.name}" th:value="${msgCt.id}" ></option>
+                        </optgroup>
+                        <optgroup label="--请选择反馈人电话号码--">
+                            <option th:each="msgCt:${msgCt}" th:text="${msgCt.tel}" th:value="${msgCt.id}" ></option>
+                        </optgroup>
+                    </select>
+
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>必须选择反馈人</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">收信人：</label>
+                <div class="col-sm-8">
+                    <select id="addresserId" name="addresserId" class="form-control" required>
+                        <option value="">--请选择收信人其中一个信息--</option>
+                        <optgroup label="--请选择收信人用户名--">
+                            <option th:each="msgAdm:${msgAdm}" th:text="${msgAdm.loginName}" th:value="${msgAdm.userId}" th:selected="*{uName}==${msgAdm.loginName}?true:false " ></option>
+                        </optgroup>
+                        <optgroup label="--请选择收信人姓名--">
+                            <option th:each="msgAdm:${msgAdm}" th:text="${msgAdm.userName}" th:value="${msgAdm.userId}" ></option>
+                        </optgroup>
+                        <optgroup label="--请选择收信人电话号码--">
+                            <option th:each="msgAdm:${msgAdm}" th:text="${msgAdm.phonenumber}" th:value="${msgAdm.userId}" ></option>
+                        </optgroup>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>必须选择收信人</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否已读：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_yes_no')}">
+                        <input type="radio" th:id="${'status_' + dict.dictCode}" name="status" th:value="${dict.dictValue}" th:field="*{status}">
+                        <label th:for="${'status_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "crm/msgfeedback";
+        $("#form-msgfeedback-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-msgfeedback-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('预约')" />
+</head>
+<body class="gray-bg" style="height: auto" onload="syappoint()">
+    <div class="row container-div" style="padding: 3%">
+
+        <div class="col-sm-12">
+            <div style="text-align: center;padding: 1%">
+                <h2>
+                    预约
+                </h2>
+                <a class="btn btn-success" onclick="appointadd()" style="margin-left: 90%"><i class="fa fa-plus"></i>增加预约</a>
+            </div>
+            <div class="row animated fadeInRight">
+                <div class="ibox float-e-margins">
+                    <div id="ibox-content">
+                        <div id="vertical-timeline" class="vertical-container light-timeline">
+                            <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon navy-bg">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+
+                                <div class="vertical-timeline-content">
+                                    <h2>预约</h2>
+                                    <p>特意提醒，您预约了车辆（），期待在预约当天见到您，祝您愉快！
+                                    </p>
+                                    <a href="#" class="btn btn-sm btn-primary">取消预约</a>
+                                    <span class="vertical-date">预约时间：<br><small>2月3日</small></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx+ "home/crmuser/crmappointadd";
+
+        function appointadd() {
+            table.set();
+            // var _url = prefix;
+            var _width = $(window).width()*0.8;
+            var _height = $(window).height()*0.6;
+            // console.log(_width,_height);
+            //如果是移动端，就使用自适应大小弹窗
+            if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                _width = 'auto';
+                _height = 'auto';
+            }
+            $.modal.open("增加预约", prefix,_width,_height);
+        }
+    </script>
+<script th:inline="javascript">
+    function syappoint() {
+        var crmCount = [[${crmCount}]];
+        var crmAppoint =[[${crmAppoint}]];
+        var appointAll = '';
+        for(var i=0;i<crmCount;i++){
+            var appointtime = timeshow(crmAppoint[i].time);
+            var disuse = new Date()>new Date(crmAppoint[i].time) ? 'disabled' :'';
+            // console.log(appointtime,nowtime,disuse);
+            appointAll += '<div class="vertical-timeline-block">\n' +
+                '                                <div class="vertical-timeline-icon navy-bg">\n' +
+                '                                    <i class="fa fa-clock-o"></i>\n' +
+                '                                </div>\n' +
+                '                                <div class="vertical-timeline-content">\n' +
+                '                                    <h2>预约（'+crmAppoint[i].car+'）</h2>\n' +
+                '                                    <p>特意提醒，您预约了车辆（'+crmAppoint[i].car+'），期待在预约当天见到您，祝您愉快！\n' +
+                '                                    </p>\n' +
+                '                                    <a href="javascript:void(0)" onclick="removeaa(' + crmAppoint[i].id + ')" class="btn btn-sm btn-primary '+disuse+'">取消预约</a>\n' +
+                '                                    <span class="vertical-date">预约时间：<br><small>'+appointtime+'</small></span>\n' +
+                '                                </div>\n' +
+                '                            </div>';
+            console.log('count',i);
+        }
+        $("#vertical-timeline").html(appointAll);
+        if(crmCount==0)
+            $("#nonews").show();
+    }
+    function removeaa(id) {
+        var data = {"ids": id};
+        var config = {
+            url: "/home/crmuser/crmappointremove",
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
+            success: function(result) {
+                if (result.code == web_status.SUCCESS) {
+                    layer.msg("删除成功", {
+                        icon: 1,
+                        time: 500,
+                        shade: [0.1, '#8F8F8F']
+                    },function() {
+                        window.location.reload();
+                    });
+                    // $.modal.msgSuccess(result.msg);
+
+                }
+            }
+        };
+        $.ajax(config)
+    }
+    function timeshow(createTime){
+        var mydate = new Date(createTime);
+        var str = "" + mydate.getFullYear() + "年";
+        str += (mydate.getMonth()+1) + "月";
+        str += mydate.getDate() + "日";
+        return str;
+    }
+</script>
+</body>
+</html>

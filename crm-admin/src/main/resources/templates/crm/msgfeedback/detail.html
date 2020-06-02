@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('详细反馈建议')" />
+    <th:block th:include="include :: summernote-css" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <form class="form-horizontal m" id="form-msgfeedback-detail" th:object="${crmMsgFeedback}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5><div class="form-control-static" th:text="*{title}"></div></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h4>反馈</h4>
+                            <div class="wrapper">
+                                <p>
+                                    <div class="form-control-static" th:text="*{msg}"></div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">反馈人：</label>
+                <div class="col-sm-4">
+                    <div class="form-control-static" th:text="*{ctName}"></div>
+                </div>
+                <label class="col-sm-2 control-label">收信人：</label>
+                <div class="col-sm-4">
+                    <div class="form-control-static" th:text="*{uName}"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: summernote-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "crm/msgfeedback";
+        $("#form-msgfeedback-detail").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/detail", $('#form-msgfeedback-detail').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

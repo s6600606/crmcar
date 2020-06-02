@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmMessageMapper">
+    
+    <resultMap type="CrmMessage" id="CrmMessageResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="msg"    column="msg"    />
+        <result property="uName"    column="u_name"    />
+        <result property="phonenumber"    column="phonenumber"    />
+        <result property="ctName"    column="ct_name"    />
+        <result property="tel"    column="tel"    />
+        <result property="title"    column="title"    />
+        <result property="sex"    column="sex"    />
+        <result property="addresserId"    column="addresser_id"    />
+        <result property="addresseeId"    column="addressee_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectCrmMessageVo">
+--         select id, title, msg, addresser_id, addressee_id, create_time, status from crm_message
+       SELECT
+                m.id,
+                m.title,
+                m.msg,
+                u.login_name u_name,
+                u.phonenumber,
+                ct.login_name ct_name,
+                ct.tel,
+                ct.sex,
+                m.create_time,
+                m.`status`
+        FROM
+                crm_message m,
+                sys_user u,
+                crm_contacts ct
+        WHERE
+                m.addresser_id = u.user_id
+        AND m.addressee_id = ct.id
+    </sql>
+
+    <select id="selectCrmMessageList" parameterType="CrmMessage" resultMap="CrmMessageResult">
+        <include refid="selectCrmMessageVo"/>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="msg != null  and msg != ''"> and msg = #{msg}</if>
+            <if test="createTime != null "> and create_time = #{time}</if>
+            <if test="status != null and status!=''"> and status = #{status}</if>
+        ORDER BY m.create_time DESC
+    </select>
+    
+    <select id="selectCrmMessageById" parameterType="Long" resultMap="CrmMessageResult">
+        <include refid="selectCrmMessageVo"/>
+        and m.id = #{id}
+    </select>
+
+    <select id="selectCrmMessageByLoginName" parameterType="String" resultMap="CrmMessageResult">
+        <include refid="selectCrmMessageVo"/>
+        and ct.login_name = #{loginName}
+        ORDER BY m.create_time DESC
+    </select>
+        
+    <insert id="insertCrmMessage" parameterType="CrmMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="msg != null  and msg != ''">msg,</if>
+            <if test="addresserId != null  and addresserId != ''">addresser_id,</if>
+            <if test="addresseeId != null  and addresseeId != ''">addressee_id,</if>
+            create_time,
+            <if test="status != null and status!=''">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="msg != null  and msg != ''">#{msg},</if>
+            <if test="addresserId != null  and addresserId != ''">#{addresserId},</if>
+            <if test="addresseeId != null  and addresseeId != ''">#{addresseeId},</if>
+            sysdate(),
+            <if test="status != null and status!=''">#{status},</if>
+         </trim>
+    </insert>
+    <insert id="insertCrmMessageAll" parameterType="CrmMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="msg != null  and msg != ''">msg,</if>
+            addresser_id,
+            <if test="addresseeId != null  and addresseeId != ''">addressee_id,</if>
+            create_time,
+            status,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="msg != null  and msg != ''">#{msg},</if>
+            "1",
+            <if test="addresseeId != null  and addresseeId != ''">#{addresseeId},</if>
+            sysdate(),
+            "N",
+        </trim>
+    </insert>
+    <insert id="insertCrmMessageAuto" parameterType="CrmMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            msg,
+            addresser_id,
+            <if test="addresseeId != null  and addresseeId != ''">addressee_id,</if>
+            create_time,
+            status,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            CONCAT('本店已收到您的',#{msg},'！感谢您对我本店的支持与信赖，我们将再接再厉为您提供更好的服务！'),
+            1,
+            <if test="addresseeId != null  and addresseeId != ''">#{addresseeId},</if>
+            sysdate(),
+            'N',
+        </trim>
+    </insert>
+
+    <update id="updateCrmMessage" parameterType="CrmMessage">
+        update crm_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="msg != null  and msg != ''">msg = #{msg},</if>
+            <if test="addresserId != null  and addresserId != ''">addresser_id = #{addresserId},</if>
+            <if test="addresseeId != null  and addresseeId != ''">addressee_id = #{addresseeId},</if>
+            <if test="status != null and status!=''">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmMessageById" parameterType="Long">
+        delete from crm_message where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmMessageByIds" parameterType="String">
+        delete from crm_message where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

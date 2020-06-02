@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmContractMapper">
+    
+    <resultMap type="CrmContract" id="CrmContractResult">
+        <result property="id"    column="id"    />
+        <result property="contractName"    column="contract_name"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="contractAmount"    column="contract_amount"    />
+        <result property="customerSigner"    column="customer_signer"    />
+        <result property="companySigner"    column="company_signer"    />
+        <result property="salesperson"    column="salesperson"    />
+        <result property="remark"    column="remark"    />
+        <result property="updatetime"    column="updatetime"    />
+        <result property="carId"    column="car_id"    />
+        <result property="car"    column="car"    />
+    </resultMap>
+
+    <sql id="selectCrmContractVo">
+--         select id, contract_name, customer_name, order_time, contract_amount, customer_signer, company_signer, salesperson, remark, updatetime, car_id from crm_contract
+        SELECT
+        crm_contract.id,
+        crm_contract.contract_name,
+        crm_contract.customer_name,
+        crm_contract.order_time,
+        crm_contract.contract_amount,
+        crm_contract.customer_signer,
+        crm_contract.company_signer,
+        crm_contract.salesperson,
+        crm_contract.remark,
+        crm_contract.updatetime,
+        crm_contract.car_id,
+        (SELECT CONCAT(name,' ',style) FROM crm_car where crm_contract.car_id=crm_car.id) car
+        FROM
+        crm_contract
+  </sql>
+
+    <select id="selectCrmContractList" parameterType="CrmContract" resultMap="CrmContractResult">
+        <include refid="selectCrmContractVo"/>
+        <where>  
+            <if test="contractName != null  and contractName != ''"> and contract_name like concat('%', #{contractName}, '%')</if>
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="orderTime != null "> and order_time = #{orderTime}</if>
+            <if test="contractAmount != null "> and contract_amount = #{contractAmount}</if>
+        </where>
+    </select>
+    
+    <select id="selectCrmContractById" parameterType="Long" resultMap="CrmContractResult">
+        SELECT
+        crm_contract.id,
+        crm_contract.contract_name,
+        crm_contract.customer_name,
+        crm_contract.order_time,
+        crm_contract.contract_amount,
+        crm_contract.customer_signer,
+        crm_contract.company_signer,
+        crm_contract.salesperson,
+        crm_contract.remark,
+        crm_contract.updatetime,
+        crm_contract.car_id,
+        (SELECT CONCAT(name,' ',style) FROM crm_car where crm_contract.car_id=crm_car.id) car
+        FROM
+        crm_contract
+        where crm_contract.id = #{id}
+    </select>
+        
+    <insert id="insertCrmContract" parameterType="CrmContract" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractName != null  and contractName != ''">contract_name,</if>
+            <if test="customerName != null  and customerName != ''">customer_name,</if>
+            <if test="orderTime != null ">order_time,</if>
+            <if test="contractAmount != null ">contract_amount,</if>
+            <if test="customerSigner != null  and customerSigner != ''">customer_signer,</if>
+            <if test="companySigner != null  and companySigner != ''">company_signer,</if>
+            <if test="salesperson != null  and salesperson != ''">salesperson,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="updatetime != null ">updatetime,</if>
+            <if test="carId != null ">car_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractName != null  and contractName != ''">#{contractName},</if>
+            <if test="customerName != null  and customerName != ''">#{customerName},</if>
+            <if test="orderTime != null ">#{orderTime},</if>
+            <if test="contractAmount != null ">#{contractAmount},</if>
+            <if test="customerSigner != null  and customerSigner != ''">#{customerSigner},</if>
+            <if test="companySigner != null  and companySigner != ''">#{companySigner},</if>
+            <if test="salesperson != null  and salesperson != ''">#{salesperson},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="updatetime != null ">#{updatetime},</if>
+            <if test="carId != null ">#{carId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCrmContract" parameterType="CrmContract">
+        update crm_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractName != null  and contractName != ''">contract_name = #{contractName},</if>
+            <if test="customerName != null  and customerName != ''">customer_name = #{customerName},</if>
+            <if test="orderTime != null ">order_time = #{orderTime},</if>
+            <if test="contractAmount != null ">contract_amount = #{contractAmount},</if>
+            <if test="customerSigner != null  and customerSigner != ''">customer_signer = #{customerSigner},</if>
+            <if test="companySigner != null  and companySigner != ''">company_signer = #{companySigner},</if>
+            <if test="salesperson != null  and salesperson != ''">salesperson = #{salesperson},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="updatetime != null ">updatetime = #{updatetime},</if>
+            <if test="carId != null ">car_id = #{carId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmContractById" parameterType="Long">
+        delete from crm_contract where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmContractByIds" parameterType="String">
+        delete from crm_contract where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

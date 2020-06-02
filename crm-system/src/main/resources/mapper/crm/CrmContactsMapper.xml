@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmContactsMapper">
+    
+    <resultMap type="CrmContacts" id="CrmContactsResult">
+        <result property="id"    column="id"    />
+        <result property="loginName"    column="login_name"   />
+        <result property="pwd"     column="pwd"     />
+        <result property="loginIp"    column="login_ip"   />
+        <result property="loginDate"     column="login_date"     />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="tel"    column="tel"    />
+        <result property="email"    column="email"    />
+        <result property="job"    column="job"    />
+        <result property="address"    column="address"    />
+        <result property="lastContactTime"    column="last_contact_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCrmContactsVo">
+        select id,login_name,pwd,login_ip,login_date, name,sex, tel, email,job,address, last_contact_time, remark,type, create_time from crm_contacts
+    </sql>
+    <select id="selectCrmContactsAll" resultMap="CrmContactsResult">
+        <include refid="selectCrmContactsVo"/>
+    </select>
+    <select id="selectCrmContactsList" parameterType="CrmContacts" resultMap="CrmContactsResult">
+        <include refid="selectCrmContactsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null and sex != ''">AND sex = #{sex}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="job != null  and job != ''"> and job = #{job}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="lastContactTime != null "> and last_contact_time = #{lastContactTime}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="type != null and type != ''">AND type = #{type}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCrmContactsById" parameterType="Long" resultMap="CrmContactsResult">
+        <include refid="selectCrmContactsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCrmContacts" parameterType="CrmContacts" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_contacts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            login_name,
+            pwd,
+            <if test="name != null  and name != ''">name,</if>
+            <if test="sex != null and sex != '' ">sex,</if>
+            <if test="tel != null  and tel != ''">tel,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="job != null  and job != ''">job,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="lastContactTime != null ">last_contact_time,</if>
+            remark,
+            <if test="type != null and type != '' ">type,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <choose>
+                <when test="loginName != null and loginName !=''">
+                    #{loginName},
+                </when>
+                <when test="tel != null and tel !=''">
+                    CONCAT('用户', #{tel}),
+                </when>
+                <when test="email != null and email !=''">
+                    CONCAT('用户', #{email}),
+                </when>
+                <otherwise>
+                    "用户123456",
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="pwd != null and pwd !=''">
+                    #{pwd},
+                </when>
+                <otherwise>
+                    '123456',
+                </otherwise>
+            </choose>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="sex != null and sex != '' ">#{sex},</if>
+            <if test="tel != null  and tel != ''">#{tel},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="job != null  and job != ''">#{job},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="lastContactTime != null ">#{lastContactTime},</if>
+            #{remark},
+            <if test="type != null and type != '' ">#{type},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCrmContacts" parameterType="CrmContacts">
+        update crm_contacts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">login_name = #{loginName},</if>
+            <if test="pwd != null  and pwd != ''">pwd = #{pwd},</if>
+            <if test="loginIp != null  and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginDate != null  and loginDate != ''">login_date = #{loginDate},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="sex != null and sex != '' ">sex = #{sex},</if>
+            <if test="tel != null  and tel != ''">tel = #{tel},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="job != null  and job != ''">job = #{job},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            last_contact_time = #{lastContactTime},
+            remark = #{remark},
+            <if test="type != null and type != '' ">type = #{type},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmContactsById" parameterType="Long">
+        delete from crm_contacts where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmContactsByIds" parameterType="String">
+        delete from crm_contacts where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    
+    <select id="selectCrmByLoginName" parameterType="String" resultMap="CrmContactsResult">
+        <include refid="selectCrmContactsVo"/>
+        where login_name = #{userName}
+    </select>
+
+    <select id="selectCrmByTel" parameterType="String" resultMap="CrmContactsResult">
+        <include refid="selectCrmContactsVo"/>
+        where tel = #{tel}
+    </select>
+
+    <select id="selectCrmByEmail" parameterType="String" resultMap="CrmContactsResult">
+        <include refid="selectCrmContactsVo"/>
+        where email = #{email}
+    </select>
+    
+</mapper>

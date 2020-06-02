@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmOrderStandardMapper">
+    
+    <resultMap type="CrmOrderStandard" id="CrmOrderStandardResult">
+        <result property="id"    column="id"    />
+        <result property="monthAmount"    column="month_amount"    />
+        <result property="yearAmount"    column="year_amount"    />
+        <result property="monthOrder"    column="month_order"    />
+        <result property="yearOrder"    column="year_order"    />
+        <result property="monthAamount"    column="month_Aamount"    />
+        <result property="monthAorder"    column="month_Aorder"    />
+    </resultMap>
+
+    <sql id="selectCrmOrderStandardVo">
+        select id, month_amount, year_amount, month_order, year_order, month_Aamount, month_Aorder from crm_order_standard
+    </sql>
+
+    <select id="selectCrmOrderStandardList" parameterType="CrmOrderStandard" resultMap="CrmOrderStandardResult">
+        <include refid="selectCrmOrderStandardVo"/>
+        <where>  
+            <if test="monthAorder != null "> and month_Aorder = #{monthAorder}</if>
+        </where>
+    </select>
+    
+    <select id="selectCrmOrderStandardById" parameterType="Long" resultMap="CrmOrderStandardResult">
+        <include refid="selectCrmOrderStandardVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCrmOrderStandard" parameterType="CrmOrderStandard" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_order_standard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="monthAmount != null ">month_amount,</if>
+            <if test="yearAmount != null ">year_amount,</if>
+            <if test="monthOrder != null ">month_order,</if>
+            <if test="yearOrder != null ">year_order,</if>
+            <if test="monthAamount != null ">month_Aamount,</if>
+            <if test="monthAorder != null ">month_Aorder,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="monthAmount != null ">#{monthAmount},</if>
+            <if test="yearAmount != null ">#{yearAmount},</if>
+            <if test="monthOrder != null ">#{monthOrder},</if>
+            <if test="yearOrder != null ">#{yearOrder},</if>
+            <if test="monthAamount != null ">#{monthAamount},</if>
+            <if test="monthAorder != null ">#{monthAorder},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCrmOrderStandard" parameterType="CrmOrderStandard">
+        update crm_order_standard
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="monthAmount != null ">month_amount = #{monthAmount},</if>
+            <if test="yearAmount != null ">year_amount = #{yearAmount},</if>
+            <if test="monthOrder != null ">month_order = #{monthOrder},</if>
+            <if test="yearOrder != null ">year_order = #{yearOrder},</if>
+            <if test="monthAamount != null ">month_Aamount = #{monthAamount},</if>
+            <if test="monthAorder != null ">month_Aorder = #{monthAorder},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmOrderStandardById" parameterType="Long">
+        delete from crm_order_standard where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmOrderStandardByIds" parameterType="String">
+        delete from crm_order_standard where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

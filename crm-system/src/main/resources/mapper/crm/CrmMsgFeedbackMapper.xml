@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmMsgFeedbackMapper">
+    
+    <resultMap type="CrmMsgFeedback" id="CrmMsgFeedbackResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="msg"    column="msg"    />
+        <result property="uName"    column="u_name"    />
+        <result property="phonenumber"    column="phonenumber"    />
+        <result property="ctName"    column="ct_name"    />
+        <result property="tel"    column="tel"    />
+        <result property="title"    column="title"    />
+        <result property="sex"    column="sex"    />
+        <result property="addresserId"    column="addresser_id"    />
+        <result property="addresseeId"    column="addressee_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectCrmMsgFeedbackVo">
+--         select id, title, msg, addresser_id, addressee_id, create_time, status from crm_msg_feedback
+        SELECT
+                m.id,
+                m.title,
+                m.msg,
+				ct.login_name ct_name,
+                ct.tel,
+                ct.sex,
+                u.login_name u_name,
+                u.phonenumber,
+
+                m.create_time,
+                m.`status`
+        FROM
+                crm_msg_feedback m,
+                sys_user u,
+                crm_contacts ct
+        WHERE
+                m.addressee_id = u.user_id
+        AND m.addresser_id = ct.id
+    </sql>
+
+    <select id="selectCrmMsgFeedbackList" parameterType="CrmMsgFeedback" resultMap="CrmMsgFeedbackResult">
+        <include refid="selectCrmMsgFeedbackVo"/>
+
+            <if test="title != null  and title != ''"> and m.title = #{title}</if>
+            <if test="msg != null  and msg != ''"> and m.msg = #{msg}</if>
+            <!--<if test="addresserId != null "> and addresser_id = #{addresserId}</if>-->
+            <!--<if test="addresseeId != null "> and addressee_id = #{addresseeId}</if>-->
+            <if test="status != null  and status != ''"> and m.status = #{status}</if>
+        ORDER BY m.create_time DESC
+    </select>
+    
+    <select id="selectCrmMsgFeedbackById" parameterType="Long" resultMap="CrmMsgFeedbackResult">
+        <include refid="selectCrmMsgFeedbackVo"/>
+        and m.id = #{id}
+    </select>
+        
+    <insert id="insertCrmMsgFeedback" parameterType="CrmMsgFeedback" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_msg_feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="msg != null  and msg != ''">msg,</if>
+            <if test="addresserId != null ">addresser_id,</if>
+            addressee_id,
+            create_time,
+            <if test="status != null  and status != ''">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="msg != null  and msg != ''">#{msg},</if>
+            <if test="addresserId != null ">#{addresserId},</if>
+            1,
+            sysdate(),
+            <if test="status != null  and status != ''">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCrmMsgFeedback" parameterType="CrmMsgFeedback">
+        update crm_msg_feedback
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="msg != null  and msg != ''">msg = #{msg},</if>
+            <if test="addresserId != null ">addresser_id = #{addresserId},</if>
+            <if test="addresseeId != null ">addressee_id = #{addresseeId},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmMsgFeedbackById" parameterType="Long">
+        delete from crm_msg_feedback where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmMsgFeedbackByIds" parameterType="String">
+        delete from crm_msg_feedback where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

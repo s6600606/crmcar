@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('系统信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg" style="height: auto" onload="synews()">
+    <div class="row container-div" style="padding: 3%">
+        <div class="search-collapse col-sm-12">
+            <div style="text-align: center;padding: 1%">
+                <h1><strong>系统消息</strong></h1>
+            </div>
+            <div id="nonews" style="display: none">
+                暂无信息
+            </div>
+            <div id="crmmsgs" class="col-sm-10 col-sm-offset-1 ">
+
+            </div>
+        </div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        function synews() {
+            var crmCount = [[${crmCount}]];
+            var crmMessage =[[${crmMessage}]];
+            var msgsAll = '';
+            for(var i=0;i<crmCount;i++){
+                var createTime = timeshow(crmMessage[i].createTime);
+                msgsAll += '<div  style="background: #e4e4e4;padding: 2%;margin: 2%" >\n' +
+                    '                <div class="entry-title">\n' +
+                    '                    <h2>\n' +
+                    '<sup class="fa fa-circle status'+crmMessage[i].status +' " style="color: #cc4545;font-size: 10px;display: none"></sup>' +
+                    '                        <a href="javascript:void(0)" onclick="msgdetail(\'' + crmMessage[i].id+ '\')">'+crmMessage[i].title+'</a>\n' +
+
+                    '                    </h2>\n' +
+                    '                </div>\n' +
+                    '                <div class="entry-snippet">\n' +
+                    '                    <p>'+crmMessage[i].msg+'</p>\n' +
+                    '                </div>\n' +
+                    '                <ul class="entry-meta list-inline clearfix">\n' +
+                    '                    <li class="entry-date">时间：<span>'+createTime+'</span>\n' +
+                    '                    </li>\n' +
+                    '                    <li class="entry-author">发信人：<span>'+crmMessage[i].uName+'</span>\n' +
+                    '                    </li>\n' +
+                    '                </ul>\n' +
+                    '            </div>';
+                console.log('count',i);
+            }
+            $("#crmmsgs").html(msgsAll);
+            if(crmCount==0)
+                $("#nonews").show();
+            $(".statusN").show();
+            $(".status").show();
+        }
+        function timeshow(createTime){
+            var mydate = new Date(createTime);
+            var str = "" + mydate.getFullYear() + "年";
+            str += (mydate.getMonth()+1) + "月";
+            str += mydate.getDate() + "日";
+            return str;
+        }
+        function msgdetail(id,width,height) {
+            var _url = "detail/"+id;
+            var _width = $.common.isEmpty(width) ? ($(window).width()*0.8) : width;
+            var _height = $.common.isEmpty(height) ? ($(window).height()*0.6) : height;
+            console.log(_width,_height);
+            //如果是移动端，就使用自适应大小弹窗
+            if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                _width = 'auto';
+                _height = 'auto';
+            }
+
+            var options = {
+                title: "系统信息详细",
+                width:_width,
+                height:_height,
+                url: _url,
+                skin: 'layui-layer-gray',
+                btn: ['关闭'],
+                yes: function (index, layero) {
+                    layer.close(index);
+                }
+            };
+            $.modal.openOptions(options);
+        }
+    </script>
+</body>
+</html>

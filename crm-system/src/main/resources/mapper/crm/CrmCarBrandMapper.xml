@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmCarBrandMapper">
+    
+    <resultMap type="CrmCarBrand" id="CrmCarBrandResult">
+        <result property="id"    column="id"    />
+        <result property="carbrand"    column="carbrand"    />
+        <result property="createtime"    column="createtime"    />
+    </resultMap>
+
+    <sql id="selectCrmCarBrandVo">
+        select id, carbrand, createtime from crm_car_brand
+    </sql>
+
+    <select id="selectCrmCarBrandList" parameterType="CrmCarBrand" resultMap="CrmCarBrandResult">
+        <include refid="selectCrmCarBrandVo"/>
+        <where>  
+            <if test="carbrand != null  and carbrand != ''"> and carbrand = #{carbrand}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCrmCarBrandById" parameterType="Long" resultMap="CrmCarBrandResult">
+        <include refid="selectCrmCarBrandVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCrmCarBrand" parameterType="CrmCarBrand" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_car_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carbrand != null  and carbrand != ''">carbrand,</if>
+            createtime,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carbrand != null  and carbrand != ''">#{carbrand},</if>
+            sysdate(),
+         </trim>
+    </insert>
+
+    <update id="updateCrmCarBrand" parameterType="CrmCarBrand">
+        update crm_car_brand
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carbrand != null  and carbrand != ''">carbrand = #{carbrand},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmCarBrandById" parameterType="Long">
+        delete from crm_car_brand where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmCarBrandByIds" parameterType="String">
+        delete from crm_car_brand where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

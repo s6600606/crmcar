@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('统计')" />
+</head>
+<body class="gray-bg" onload="ordermonth();salemonth()">
+<div class="wrapper wrapper-content">
+    <div class="row" id="orderhead">
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" >
+                <div class="ibox-title">
+                    <h5 class="ordermonths">
+                        <button type="button" class="btn btn-link" onclick="beforemonth();ordermonth()">上一月</button>
+                        <span id = "changemonth"></span>      <span>月订单</span>
+                        <button type="button" class="btn btn-link" onclick="aftermonth();ordermonth()">下一月</button>
+                    </h5>
+                    <h5 class="orderyears">
+                        <button type="button" class="btn btn-link" onclick="beforeyear();orderyear()">上一月</button>
+                        <span id = "changeyear"></span>      <span>年订单</span>
+                        <button type="button" class="btn btn-link" onclick="afteryear();orderyear()">下一月</button>
+                    </h5>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button id="ordermonth" type="button" class="btn btn-xs btn-white" onclick="ordermonth()">月</button>
+                            <button id="orderyear" type="button" class="btn btn-xs btn-white" onclick="orderyear()">年</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content" >
+                    <div class="row">
+                        <div class="col-sm-9" >
+                            <div class="flot-chart" style="height: 30vh;">
+                                <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" >
+                            <ul class="stat-list" style="padding: 2%" id="orderRight">
+                                <li>
+                                    <h2 class="no-margins">2,346</h2>
+                                    <small>订单总数</small>
+                                    <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 48%;" class="progress-bar"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h2 class="no-margins ">4,422</h2>
+                                    <small>最近一个月订单</small>
+                                    <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 60%;" class="progress-bar"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h2 class="no-margins ">9,180</h2>
+                                    <small>本月销售额</small>
+                                    <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 22%;" class="progress-bar"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins" >
+                <div class="ibox-title">
+                    <h5 class="ordermonths">
+                        <button type="button" class="btn btn-link" onclick="beforemonth2();salemonth()">上一月</button>
+                        <span id = "salemonth"></span>      <span>月订单</span>
+                        <button type="button" class="btn btn-link" onclick="aftermonth2();salemonth()">下一月</button>
+                    </h5>
+                </div>
+                <div class="ibox-content" >
+                    <div class="row">
+                        <div class="" >
+                            <div class="flot-chart" style="height: 30vh;">
+                                <div class="flot-chart-content" id="flot-sale-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: echarts-js" />
+    <script>
+        var prefix = ctx + "crm/orderform";
+        var now = new Date();
+        //格式化日，如果小于9，上面补0
+        var month = ('0' + (now.getMonth() + 1)).slice(-2);
+        //拼装完整日期格式
+        var tomonth = now.getFullYear() + '-' + (month);
+        document.getElementById("changemonth").innerHTML = (tomonth);
+        document.getElementById("salemonth").innerHTML = (tomonth);
+        //拼装完整日期格式
+        var toyear = now.getFullYear();
+        document.getElementById("changeyear").innerHTML = (toyear);
+    </script>
+    <script>
+        function beforemonth() {
+            var pagemonth = document.getElementById("changemonth").innerHTML;
+
+            var d = new Date(pagemonth);
+            d.setMonth(d.getMonth()-1);
+
+            var beforey = d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2);
+            document.getElementById("changemonth").innerHTML = beforey;
+        }
+        function aftermonth() {
+            var now = new Date();
+            //拼装完整日期格式
+            // var toyear = now.getFullYear();
+            var pagemonth = document.getElementById("changemonth").innerHTML;
+
+            var d = new Date(pagemonth);
+            d.setMonth(d.getMonth()+1);
+            // alert(d.toLocaleString());
+            var aftery = d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2);
+
+            var checky = new Date(aftery);
+            if(checky>now){
+                aftery = pagemonth;
+            }
+            document.getElementById("changemonth").innerHTML = aftery;
+        }
+        function beforeyear() {
+            var pageyear = document.getElementById("changeyear").innerHTML;
+            var beforey = parseInt(pageyear)-1;
+            if(beforey<2016){
+                beforey = 2016;
+            }
+            document.getElementById("changeyear").innerHTML = beforey;
+        }
+        function afteryear() {
+            var now = new Date();
+            //拼装完整日期格式
+            var toyear = now.getFullYear();
+            var pageyear = document.getElementById("changeyear").innerHTML;
+            var aftery = parseInt(pageyear)+1;
+            if(aftery>toyear){
+                aftery = toyear;
+            }
+            document.getElementById("changeyear").innerHTML = aftery;
+        }
+        function beforemonth2() {
+            var pagemonth = document.getElementById("salemonth").innerHTML;
+
+            var d = new Date(pagemonth);
+            d.setMonth(d.getMonth()-1);
+
+            var beforey = d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2);
+            document.getElementById("salemonth").innerHTML = beforey;
+        }
+        function aftermonth2() {
+            var now = new Date();
+            //拼装完整日期格式
+            // var toyear = now.getFullYear();
+            var pagemonth = document.getElementById("salemonth").innerHTML;
+
+            var d = new Date(pagemonth);
+            d.setMonth(d.getMonth()+1);
+            // alert(d.toLocaleString());
+            var aftery = d.getFullYear() + '-' +('0' + (d.getMonth() + 1)).slice(-2);
+
+            var checky = new Date(aftery);
+            if(checky>now){
+                aftery = pagemonth;
+            }
+            document.getElementById("salemonth").innerHTML = aftery;
+        }
+    </script>
+    <script type="text/javascript">
+
+        var data1 = [];
+        var option = {
+            color: ['#1ab394'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                top:'12%',
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [{
+                axisLabel: {
+                    formatter: '{value}万元',
+                    color: '#999'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '销售额',
+                    type: 'bar',
+                    barWidth: '40%',
+                    label: {
+                        show: true,
+                        position: "top",
+
+                        // fontSize: 30,
+                        fontWeight: 'bold',
+                        color: '#1ab394'
+                    },
+                    data: data1
+                }
+            ]
+        };
+
+        function ordermonth() {
+            var month = document.getElementById("changemonth").innerHTML;
+            // var month = "2020-04";
+            $.ajax({
+                type: "post",
+                url: prefix + "/month",
+                data: {
+                    "month": month
+                },
+                success: function(r) {
+                    // console.log(r);
+                    var lineChart = echarts.init(document.getElementById("flot-dashboard-chart"));
+
+                    option.xAxis[0].data = r['天数'];
+                    option.series[0].data = r['月销售'];
+
+                    lineChart.setOption(option);
+                    $(window).resize(lineChart.resize);
+                    $("#ordermonth").addClass("active");
+                    $("#orderyear").removeClass("active");
+                    document.getElementById("changemonth").innerHTML = month;
+
+                    $(".orderyears").css("display","none");
+                    $(".ordermonths").removeAttr("style");
+                    orderRight("月",r);
+                    // orderhead("月",r);
+                }
+            });
+        }
+        function orderyear() {
+
+            var year = document.getElementById("changeyear").innerHTML;
+            $.ajax({
+                type: "post",
+                url: prefix + "/year",
+                data: {
+                    "year": year+"-01-01"
+                },
+
+                success: function(r) {
+                    // console.log(r);
+                    var lineChart = echarts.init(document.getElementById("flot-dashboard-chart"));
+
+                    option.xAxis[0].data = r['月数'];
+                    option.series[0].data = r['年销售'];
+
+                    lineChart.setOption(option);
+                    $(window).resize(lineChart.resize);
+
+                    $("#orderyear").addClass("active");
+                    $("#ordermonth").removeClass("active");
+                    document.getElementById("changeyear").innerHTML = year;
+
+                    $(".ordermonths").css("display","none");
+                    $(".orderyears").removeAttr("style");
+                    orderRight("年",r);
+                }
+            });
+        }
+        
+        function orderRight(rightdate,orderdata) {
+            $.ajax({
+                type: "post",
+                url: prefix + "/rightdate",
+                data: {
+                    "rightdate": rightdate
+                },
+
+                success: function (r) {
+
+                    var orderRightlist = '';
+                    var da1 = (orderdata['本订单数']/r["订单数"]*100).toFixed(2);
+                    var da2 = (orderdata['上销售额']/r["销售额"]*100).toFixed(2);
+                    var da3 = (orderdata['本销售额']/r["销售额"]*100).toFixed(2);
+                    orderRightlist+='<li>\n' +
+                        '                                    <h2 class="no-margins">'+orderdata['本订单数']+'</h2>\n' +
+                        '                                    <small>本'+rightdate+'订单总数</small>\n' +
+                        '                                    <div class="stat-percent">'+da1+'% <i class="fa fa-level-up text-navy"></i>\n' +
+                        '                                    </div>\n' +
+                        '                                    <div class="progress progress-mini">\n' +
+                        '                                        <div style="width: '+da1+'%;" class="progress-bar"></div>\n' +
+                        '                                    </div>\n' +
+                        '                                </li>';
+                    orderRightlist+='<li>\n' +
+                        '                                    <h2 class="no-margins">'+orderdata['上销售额']+'</h2>\n' +
+                        '                                    <small>上'+rightdate+'销售总额</small>\n' +
+                        '                                    <div class="stat-percent">'+da2+'% <i class="fa fa-level-up text-navy"></i>\n' +
+                        '                                    </div>\n' +
+                        '                                    <div class="progress progress-mini">\n' +
+                        '                                        <div style="width: '+da2+'%;" class="progress-bar"></div>\n' +
+                        '                                    </div>\n' +
+                        '                                </li>';
+                    orderRightlist+='<li>\n' +
+                        '                                    <h2 class="no-margins">'+orderdata['本销售额']+'</h2>\n' +
+                        '                                    <small>本'+rightdate+'销售总额</small>\n' +
+                        '                                    <div class="stat-percent">'+da3+'% <i class="fa fa-bolt text-navy"></i>\n' +
+                        '                                    </div>\n' +
+                        '                                    <div class="progress progress-mini">\n' +
+                        '                                        <div style="width: '+da3+'%;" class="progress-bar"></div>\n' +
+                        '                                    </div>\n' +
+                        '                                </li>';
+                    $("#orderRight").html(orderRightlist);
+
+
+
+                    var orderheadlist = '';
+                    orderheadlist += '<div class="col-sm-3">\n' +
+                        '            <div class="ibox float-e-margins">\n' +
+                        '                <div class="ibox-title">\n' +
+                        '                    <span class="label label-info pull-right">'+rightdate+'</span>\n' +
+                        '                    <h5>'+rightdate+'销量</h5>\n' +
+                        '                </div>\n' +
+                        '                <div class="ibox-content">\n' +
+                        '                    <h1 class="no-margins">'+orderdata['本销售额']+'<small>    万元</small></h1>\n' +
+                        '                    <div class="stat-percent font-bold text-info">'+da3+'%<i class="fa fa-bolt"></i>\n' +
+                        '                    </div>\n' +
+                        '                    <small>'+rightdate+'销售目标：'+r["销售额"]+'万元</small>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>';
+                    orderheadlist += '<div class="col-sm-3">\n' +
+                        '            <div class="ibox float-e-margins">\n' +
+                        '                <div class="ibox-title">\n' +
+                        '                    <span class="label label-info pull-right">'+rightdate+'</span>\n' +
+                        '                    <h5>'+rightdate+'订单</h5>\n' +
+                        '                </div>\n' +
+                        '                <div class="ibox-content">\n' +
+                        '                    <h1 class="no-margins">'+orderdata['本订单数']+'</h1>\n' +
+                        '                    <div class="stat-percent font-bold text-info">'+da1+'%<i class="fa fa-level-up"></i>\n' +
+                        '                    </div>\n' +
+                        '                    <small>'+rightdate+'订单目标：'+r["订单数"]+'</small>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>';
+                    orderheadlist += '<div class="col-sm-3">\n' +
+                        '            <div class="ibox float-e-margins">\n' +
+                        '                <div class="ibox-title">\n' +
+                        '                    <span class="label label-success pull-right">月</span>\n' +
+                        '                    <h5>每月个人目标销量</h5>\n' +
+                        '                </div>\n' +
+                        '                <div class="ibox-content">\n' +
+                        '                    <h1 class="no-margins">'+r["个人销售额"]+'<small>   万元</small></h1>\n' +
+                        '                    <small>销售额</small>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>';
+                    orderheadlist += '<div class="col-sm-3">\n' +
+                        '            <div class="ibox float-e-margins">\n' +
+                        '                <div class="ibox-title">\n' +
+                        '                    <span class="label label-success pull-right">月</span>\n' +
+                        '                    <h5>每月个人目标订单</h5>\n' +
+                        '                </div>\n' +
+                        '                <div class="ibox-content">\n' +
+                        '                    <h1 class="no-margins">'+r["个人订单数"]+'</h1>\n' +
+                        '                    <small>订单数</small>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>';
+
+                    $("#orderhead").html(orderheadlist);
+                }
+            });
+
+        }
+
+    </script>
+    <script>
+        function salemonth() {
+            var month = document.getElementById("salemonth").innerHTML;
+            // var month = "2020-04";
+            $.ajax({
+                type: "post",
+                url: prefix + "/salemonth",
+                data: {
+                    "month": month
+                },
+                success: function(r) {
+                    console.log(r);
+                    var lineChart = echarts.init(document.getElementById("flot-sale-chart"));
+
+                    option.xAxis[0].data = r['人'];
+                    option.series[0].data = r['月销售'];
+
+                    lineChart.setOption(option);
+                    $(window).resize(lineChart.resize);
+                    document.getElementById("salemonth").innerHTML = month;
+                    // saleRight("月",r);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

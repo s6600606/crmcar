@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmCarMapper">
+
+    <resultMap type="CrmCar" id="CrmCarResult">
+        <result property="id"    column="id"    />
+        <result property="brand"    column="brand"    />
+        <result property="grade"    column="grade"    />
+        <result property="name"    column="name"    />
+        <result property="style"    column="style"    />
+        <result property="car"    column="car"    />
+        <result property="marketTime"    column="market_time"    />
+        <result property="price"    column="Price"    />
+        <result property="image"    column="image"    />
+        <result property="carCount"    column="car_count"    />
+        <result property="sort"    column="sort"    />
+        <result property="engine"    column="engine"    />
+        <result property="power"    column="power"    />
+        <result property="topSpeed"    column="top_speed"    />
+        <result property="lwh"    column="LWH"    />
+        <result property="acctime"    column="acctime"    />
+        <result property="fuelconsump"    column="fuelconsump"    />
+    </resultMap>
+
+    <sql id="selectCrmCarVo">
+        select id, brand, grade, name, style,CONCAT(name,' ',style) car, market_time, Price, image, car_count, sort, engine, power, top_speed, LWH, acctime, fuelconsump from crm_car
+    </sql>
+
+    <select id="selectCrmCarAll" resultMap="CrmCarResult">
+        select id, brand, grade, name, style,CONCAT(name,' ',style) car, market_time, Price, image, car_count, sort, engine, power, top_speed, LWH, acctime, fuelconsump
+        from crm_car
+    </select>
+    <select id="selectCrmCarhomeLimit" resultMap="CrmCarResult">
+        select id, brand, grade, name, style,CONCAT(name,' ',style) car, market_time, Price, image, car_count, sort, engine, power, top_speed, LWH, acctime, fuelconsump
+        from crm_car ORDER BY market_time DESC limit 6
+    </select>
+
+    <select id="selectCrmCarList" parameterType="CrmCar" resultMap="CrmCarResult">
+        <include refid="selectCrmCarVo"/>
+        <where>
+            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="style != null  and style != ''"> and style = #{style}</if>
+            <if test="marketTime != null "> and market_time = #{marketTime}</if>
+            <if test="price != null "> and Price = #{price}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+            <if test="carCount != null "> and car_count = #{carCount}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="engine != null  and engine != ''"> and engine = #{engine}</if>
+            <if test="power != null  and power != ''"> and power = #{power}</if>
+            <if test="topSpeed != null "> and top_speed = #{topSpeed}</if>
+            <if test="lwh != null  and lwh != ''"> and LWH = #{lwh}</if>
+            <if test="acctime != null "> and acctime = #{acctime}</if>
+            <if test="fuelconsump != null "> and fuelconsump = #{fuelconsump}</if>
+        </where>
+        ORDER BY market_time desc
+    </select>
+
+    <select id="selectCrmCarById" parameterType="Long" resultMap="CrmCarResult">
+        <include refid="selectCrmCarVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCrmCar" parameterType="CrmCar" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_car
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="brand != null  and brand != ''">brand,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="style != null  and style != ''">style,</if>
+            <if test="marketTime != null ">market_time,</if>
+            <if test="price != null ">Price,</if>
+            <if test="image != null  and image != ''">image,</if>
+            <if test="carCount != null ">car_count,</if>
+            <if test="sort != null ">sort,</if>
+            <if test="engine != null  and engine != ''">engine,</if>
+            <if test="power != null  and power != ''">power,</if>
+            <if test="topSpeed != null ">top_speed,</if>
+            <if test="lwh != null  and lwh != ''">LWH,</if>
+            <if test="acctime != null ">acctime,</if>
+            <if test="fuelconsump != null ">fuelconsump,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="style != null  and style != ''">#{style},</if>
+            <if test="marketTime != null ">#{marketTime},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="image != null  and image != ''">#{image},</if>
+            <if test="carCount != null ">#{carCount},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="engine != null  and engine != ''">#{engine},</if>
+            <if test="power != null  and power != ''">#{power},</if>
+            <if test="topSpeed != null ">#{topSpeed},</if>
+            <if test="lwh != null  and lwh != ''">#{lwh},</if>
+            <if test="acctime != null ">#{acctime},</if>
+            <if test="fuelconsump != null ">#{fuelconsump},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCrmCar" parameterType="CrmCar">
+        update crm_car
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="style != null  and style != ''">style = #{style},</if>
+            <if test="marketTime != null ">market_time = #{marketTime},</if>
+            <if test="price != null ">Price = #{price},</if>
+            <if test="image != null  and image != ''">image = #{image},</if>
+            <if test="carCount != null ">car_count = #{carCount},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="engine != null  and engine != ''">engine = #{engine},</if>
+            <if test="power != null  and power != ''">power = #{power},</if>
+            <if test="topSpeed != null ">top_speed = #{topSpeed},</if>
+            <if test="lwh != null  and lwh != ''">LWH = #{lwh},</if>
+            <if test="acctime != null ">acctime = #{acctime},</if>
+            <if test="fuelconsump != null ">fuelconsump = #{fuelconsump},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmCarById" parameterType="Long">
+        delete from crm_car where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmCarByIds" parameterType="String">
+        delete from crm_car where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

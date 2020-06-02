@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmOrderformMapper">
+    
+    <resultMap type="CrmOrderform" id="CrmOrderformResult">
+        <result property="carId"    column="car_id"    />
+        <result property="carName"    column="car_name"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="contractAmount"    column="contract_amount"    />
+        <result property="salesperson"    column="salesperson"    />
+        <result property="sum"    column="sum"    />
+        <result property="count"    column="count"    />
+        <!--<result property="beginTime"    column="beginTime"    />-->
+        <!--<result property="endTime"    column="endTime"    />-->
+
+    </resultMap>
+
+    <sql id="selectCrmOrderformVo">
+        SELECT
+            *
+        FROM
+            orderform
+    </sql>
+
+    <select id="selectCrmOrderformList" parameterType="CrmOrderform" resultMap="CrmOrderformResult">
+        <include refid="selectCrmOrderformVo"/>
+        <where>
+            <if test="carId != null and carId!=''"> and car_id = #{carId}</if>
+            <if test="salesperson != null and salesperson!='' "> and salesperson = #{salesperson}</if>
+            <!--<if test="beginTime != null">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
+                <!--AND orderTime &gt;= #{beginTime}-->
+            <!--</if>-->
+            <!--<if test="endTime != null">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
+                <!--AND orderTime &lt;= #{endTime}-->
+            <!--</if>-->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(order_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(order_time,'%y%m%d') &lt; date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    <select id="selectCrmOrderformPrice" parameterType="CrmOrderform" resultMap="CrmOrderformResult">
+        SELECT SUM(contract_amount) sum,COUNT(id) count FROM orderform
+        <where>
+            <if test="carId != null and carId!=''"> and car_id = #{carId}</if>
+            <if test="salesperson != null and salesperson!='' "> and salesperson = #{salesperson}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(order_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(order_time,'%y%m%d') &lt; date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    
+</mapper>

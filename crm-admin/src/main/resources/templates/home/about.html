@@ -1,0 +1,429 @@
+﻿<!DOCTYPE html>
+<!--<html dir="ltr" lang="en-US">-->
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+	<!-- Document Meta
+        ============================================= -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!--IE Compatibility Meta-->
+	<meta name="author" content="zytheme" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="description" content="construction html5 template">
+
+	<link th:href="@{/assets/images/favicon/favicon.ico}" rel="icon">
+
+	<!-- Fonts
+        ============================================= -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i%7CRaleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i%7CUbuntu:300,300i,400,400i,500,500i,700,700i' rel='stylesheet' type='text/css'>
+
+	<!-- Stylesheets
+        ============================================= -->
+	<link th:href="@{/assets/css/external.css}" rel="stylesheet">
+	<link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{/assets/css/style.css}" rel="stylesheet">
+	<link th:href="@{/ajax/libs/datapicker/bootstrap-datetimepicker.css}" rel="stylesheet"/>
+
+
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+	<!--[if lt IE 9]>
+	<script th:src="@{/assets/js/html5shiv.js}"></script>
+	<script th:src="@{/assets/js/respond.min.js}"></script>
+	<![endif]-->
+
+	<!-- Document Title
+        ============================================= -->
+	<title>汽车4S店</title>
+</head>
+<body onload="loncess();">
+     
+
+<!-- Document Wrapper
+	============================================= -->
+<div id="wrapper" class="wrapper clearfix">
+	<header id="navbar-spy" class="header header-7">
+		<div class="top-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-5">
+						<ul class="list-inline top-contact">
+							<li><span>电话 :</span>+111111111111</li>
+							<li><span>Email :</span> 1@1.com</li>
+						</ul>
+					</div>
+					<div  class="col-xs-12 col-sm-6 col-md-7 ">
+						<ul class="list-inline pull-right top-links ">
+							<li id="crmName" class="dropdown">
+								<a href="/home/login">登录</a>
+								/
+								<a href="/home/register">注册</a>
+							</li>
+							<li>
+								<a href="/home/carFeedback">意见反馈</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- .row end -->
+			</div>
+			<!-- .container end -->
+		</div>
+		<!-- .top-bar end -->
+		<nav id="primary-menu" class="navbar navbar-fixed-top">
+			<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<a class="logo" href="/home">
+						<img th:src="@{/assets/images/logo/logo-light.png}" alt="Autoshop">
+					</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse pull-right" id="header-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-left">
+						<li class="has-dropdown active">
+							<a href="/home">首页</a>
+						</li>
+						<!-- li end -->
+						<li>
+							<a href="/home/carModel">车型报价</a>
+						</li>
+						<!-- li end -->
+						<li>
+							<a href="/home/appoint/1">预约车辆</a>
+						</li>
+						<li>
+							<a href="/home/about">关于</a>
+						</li>
+
+						<!-- li end -->
+					</ul>
+
+
+
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+	</header>
+	
+	<!-- Page Title
+============================================= -->
+	<section id="page-title" class="page-title">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-6">
+					<h1>关于</h1>
+				</div>
+				<!-- .col-md-6 end -->
+				<div class="col-xs-12 col-sm-12 col-md-6">
+					<ol class="breadcrumb text-right">
+						<li>
+							<a href="index.html">首页</a>
+						</li>
+						<li class="active">关于</li>
+					</ol>
+				</div>
+				<!-- .col-md-6 end -->
+			</div>
+			<!-- .row end -->
+		</div>
+		<!-- .container end -->
+	</section>
+	<!-- #page-title end -->
+	
+	<!-- Featured #1
+============================================= -->
+	<section id="featured1" class="featured featured-1">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-6">
+					<div class="heading">
+						<p class="subheading">历史</p>
+						<h2>公司</h2>
+					</div>
+					<!-- .heading end -->
+					<div class="about-accordion">
+						<div class="panel-group accordion" id="accordion02" role="tablist" aria-multiselectable="true">
+							
+							<!-- Panel 01 -->
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingOne">
+									<h4 class="panel-title">
+										<a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion02" href="#collapse02-1" aria-expanded="true" aria-controls="collapse02-1">关于公司</a>
+										<span class="icon"></span>
+									</h4>
+								</div>
+								<div id="collapse02-1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+									<div class="panel-body">
+										<div class="pull-left pr-30">
+											<img th:src="@{/assets/images/shortcode/2.jpg}" alt="about">
+										</div>
+										<div> Duis dapibus aliquam mi, Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. Duis dapibus aliqiuam mi, egeet euismod sceler ut. </div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Panel 02 -->
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingTwo">
+									<h4 class="panel-title">
+										<a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-parent="#accordion02" href="#collapse02-2" aria-expanded="false" aria-controls="collapse02-2"> Our Mission </a>
+									</h4>
+								</div>
+								<div id="collapse02-2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false">
+									<div class="panel-body"> Duis dapibus aliquam mi, eget euismod scelerisque ut. Vivamus at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. Duis dapibus aliqiuam mi, egeet euismod sceler ut.
+										Duis dapibus aliquam mi, eget euismod scelerisque ut. Vivamus at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. egeet euismod sceler ut. </div>
+								</div>
+							</div>
+							
+							<!-- Panel 03 -->
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingThree">
+									<h4 class="panel-title">
+										<a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-parent="#accordion02" href="#collapse02-3" aria-expanded="false" aria-controls="collapse02-3">Our VISION</a>
+									</h4>
+								</div>
+								<div id="collapse02-3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="true">
+									<div class="panel-body"> Duis dapibus aliquam mi, eget euismod scelerisque ut. Vivamus at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. Duis dapibus aliqiuam mi, egeet euismod sceler ut.
+										Duis dapibus aliquam mi, eget euismod scelerisque ut. Vivamus at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. egeet euismod sceler ut. </div>
+								</div>
+							</div>
+							
+							<!-- Panel 04 -->
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingFour">
+									<h4 class="panel-title">
+										<a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-parent="#accordion02" href="#collapse02-4" aria-expanded="false" aria-controls="collapse02-4"> Our Goals </a>
+									</h4>
+								</div>
+								<div id="collapse02-4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="true">
+									<div class="panel-body"> Duis dapibus aliquam mi, eget euismod scelerisque ut. Vivamus at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. Duis dapibus aliqiuam mi, egeet euismod sceler ut.
+										Duis dapibus aliquam mi, eget euismod scelerisque ut. Vivamus at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blansadit. Duis dapibus aliquam mi, eget euismod sceler ut.Duis dapibus aliquam mi, eget euismod scelseerisque at elit quis urna adipiscing , Curabitur vitae velit in neque dictum blandit. egeet euismod sceler ut. </div>
+								</div>
+							</div>
+						</div>
+						<!-- .accordion end -->
+					</div>
+					<!-- .about-accordion end -->
+				</div>
+				<!-- .col-md-6 end -->
+				<div class="col-xs-12 col-sm-12 col-md-6">
+					<div class="heading">
+						<p class="subheading">We Are Good</p>
+						<h2>Our Features</h2>
+					</div>
+					<!-- .heading end -->
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="feature-panel">
+								<div class="feature-icon">
+									<i class="icon icon-Time"></i>
+								</div>
+								<h4 class="text-uppercase">Always Available</h4>
+								<p>Duis dapibus aliquam mi, et euismod scelerisque ut. Vivamus elit quis urna adipiscing ...</p>
+							</div>
+						</div>
+						<!-- .col-md-6 end -->
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="feature-panel">
+								<div class="feature-icon">
+									<i class="icon icon-Shield"></i>
+								</div>
+								<h4 class="text-uppercase">Qualified Agents</h4>
+								<p>Duis dapibus aliquam mi, et euismod scelerisque ut. Vivamus elit quis urna adipiscing ...</p>
+							</div>
+						</div>
+						<!-- .col-md-6 end -->
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="feature-panel mb-0">
+								<div class="feature-icon">
+									<i class="icon icon-Wallet"></i>
+								</div>
+								<h4 class="text-uppercase">Fair Prices</h4>
+								<p>you can be 100% sure that it will be delivered right on time, within the set budget limits</p>
+							</div>
+						</div>
+						<!-- .col-md-6 end -->
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="feature-panel mb-0">
+								<div class="feature-icon">
+									<i class="icon icon-Star"></i>
+								</div>
+								<h4 class="text-uppercase">Best Offers</h4>
+								<p>Duis dapibus aliquam mi, et euismod scelerisque ut. Vivamus elit quis urna adipiscing ...</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- .col-md-6 end -->
+			</div>
+			<!-- .row end -->
+		</div>
+		<!-- .container end -->
+	</section>
+	<!-- #featured1 end -->
+
+	
+	<!-- Footer #1
+============================================= -->
+	<footer id="footer" class="footer footer-2">
+		<!-- Footer Info
+    ============================================= -->
+		<div class="footer-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<div class="panel-info">
+							<div class="info-icon">
+								<i class="icon icon-Truck"></i>
+							</div>
+							<div class="info-content">
+								<h4>超越极限</h4>
+								<p>Beyond the Limit</p>
+							</div>
+						</div>
+					</div>
+					<!-- .col-md-3 end -->
+
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<div class="panel-info">
+							<div class="info-icon">
+								<i class="icon icon-Dollars"></i>
+							</div>
+							<div class="info-content">
+								<h4>价格公道</h4>
+								<p>Fair price</p>
+							</div>
+						</div>
+					</div>
+					<!-- .col-md-3 end -->
+
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<div class="panel-info">
+							<div class="info-icon">
+								<i class="icon icon-Shield"></i>
+							</div>
+							<div class="info-content">
+								<h4>优质服务</h4>
+								<p>Good service</p>
+							</div>
+						</div>
+					</div>
+					<!-- .col-md-3 end -->
+
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<div class="panel-info">
+							<div class="info-icon">
+								<i class="icon icon-Headset"></i>
+							</div>
+							<div class="info-content">
+								<h4>客户支持</h4>
+								<p>Customer Support</p>
+							</div>
+						</div>
+					</div>
+					<!-- .col-md-3 end -->
+				</div>
+			</div>
+			<!-- .container end -->
+		</div>
+		<!-- .footer-info end -->
+
+		<div class="footer-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-6">
+						<div class="powered">
+							<p>汽车4s店 &copy; 版权所有。 用心制造汽车。
+							</p>
+							<ul class="list-inline mb-0">
+								<li>
+									<a href="#">隐私政策</a>
+								</li>
+								<li>
+									<a href="#">使用条款</a>
+								</li>
+								<li>
+									<a href="/home/carModel">车型报价</a>
+								</li>
+								<li>
+									<a href="#">关于我们</a>
+								</li>
+								<li>
+									<a href="/home/carFeedback">意见反馈</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-md-6">
+						<div class="payment-methods text-right">
+							<ul class="list-inline mb-0">
+								<li><img th:src="@{/assets/images/footer/visa.png}" alt="payment"></li>
+								<li><img th:src="@{/assets/images/footer/mastercard.png}" alt="payment"></li>
+								<li><img th:src="@{/assets/images/footer/american-express.png}" alt="payment"></li>
+								<li><img th:src="@{/assets/images/footer/delta.png}" alt="payment"></li>
+								<li><img th:src="@{/assets/images/footer/cirrus.png}" alt="payment"></li>
+								<li><img th:src="@{/assets/images/footer/paypal.png}" alt="payment"></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- .container end -->
+		</div>
+		<!-- .footer-copyright end -->
+	</footer>
+</div>
+<!-- #wrapper end -->
+
+<!-- Footer Scripts
+============================================= -->
+<!--<script src="assets/js/jquery-2.2.4.min.js"></script>-->
+<!--<script src="assets/js/plugins.js"></script>-->
+<!--<script src="assets/js/functions.js"></script>-->
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<!--<script src="../../static/assets/js/jquery-2.2.4.min.js" th:src="@{/assets/js/jquery-2.2.4.min.js}"></script>-->
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<!--<script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>-->
+<script src="../static/ajax/libs/datapicker/bootstrap-datetimepicker.js" th:src="@{/ajax/libs/datapicker/bootstrap-datetimepicker.js}"></script>
+<script src="../../static/assets/js/plugins.js" th:src="@{/assets/js/plugins.js}"></script>
+<script src="../../static/assets/js/functions.js" th:src="@{/assets/js/functions.js}"></script>
+
+<script src="../../static/ajax/libs/validate/jquery.validate.min.js" th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+<script src="../../static/ajax/libs/layer/layer.min.js" th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script src="../../static/ajax/libs/blockUI/jquery.blockUI.js" th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+<script src="../../static/crm/js/ry-ui.js" th:src="@{/crm/js/ry-ui.js?v=4.0.0}"></script>
+<script>
+    function loncess(){
+        var username = '[[${CrmName}]]';
+        console.log(username);
+        if(username!="[\[${CrmName}]]" &&username!=undefined && username){
+            console.log(11,username,11);
+            console.log(111,"[\[${CrmName}]]");
+            $("#crmName").find('a').remove();
+            $("#crmName").find('div').remove();
+            $("#crmName").html('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">[[${CrmName}]]<i class="fa fa-angle-down"></i></a>'+
+                '<ul class="dropdown-menu">'+
+                '<li><a href="/home/personal/person" target="_blank">个人中心</a></li>'+
+                '<li><a onclick="exit()">退出登录</a></li></ul>');
+        }
+
+    };
+    function exit() {
+        $.ajax({
+            type: "post",
+            url: "/home/exit",
+
+            success: function(r) {
+                console.log(r);
+                location.href = '/home';
+            }
+
+        });
+    };
+</script>
+</body>
+</html>

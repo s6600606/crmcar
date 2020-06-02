@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增业绩目标')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-standard-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司月销售额：</label>
+                <div class="col-sm-8">
+                    <input name="monthAmount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司年销售额：</label>
+                <div class="col-sm-8">
+                    <input name="yearAmount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司月订单数：</label>
+                <div class="col-sm-8">
+                    <input name="monthOrder" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司年订单数：</label>
+                <div class="col-sm-8">
+                    <input name="yearOrder" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人月销售额：</label>
+                <div class="col-sm-8">
+                    <input name="monthAamount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人月订单数：</label>
+                <div class="col-sm-8">
+                    <input name="monthAorder" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "crm/standard"
+        $("#form-standard-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-standard-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

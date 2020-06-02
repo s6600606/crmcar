@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('car列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>汽车品牌：</p>
+                                <input type="text" name="brand"/>
+                            </li>
+                            <li>
+                                <p>车名：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>车型：</p>
+                                <input type="text" name="style"/>
+                            </li>
+                            <li class="select-time">
+                                <p>上市时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginMarketTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endMarketTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="crm:car:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="crm:car:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="crm:car:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="crm:car:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('crm:car:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('crm:car:remove')}]];
+        var prefix = ctx + "crm/car";
+        var imageReg = /.+\.(gif|jpg|jpeg|png|webp|bmp)/i;
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "car",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '汽车ID',
+                    visible: false
+                },
+                {
+                    field : 'brand', 
+                    title : '汽车品牌',
+                    sortable: true
+                },
+                {
+                    field : 'grade', 
+                    title : '汽车级别',
+                    sortable: true
+                },
+                {
+                    field : 'name', 
+                    title : '车名',
+                    sortable: true
+                },
+                {
+                    field : 'style', 
+                    title : '车型',
+                    sortable: true
+                },
+                {
+                    field : 'marketTime', 
+                    title : '上市时间',
+                    sortable: true,
+                    formatter:function (value,row,index) {
+                        // console.log(value,row,index);
+                        // value = value!=null? value.substring(0,7):'-';
+                        var now = new Date(value);
+                        var month = ('0' + (now.getMonth() + 1)).slice(-2);
+                        var day = ('0' + now.getDate()).slice(-2);
+                        //拼装完整日期格式
+                        var today = now.getFullYear() + '年' + (month)+'月';
+                        return today;
+                    }
+                },
+                {
+                    field : 'price', 
+                    title : '价格(万元)',
+                    sortable: true
+                },
+                {
+                    field : 'image', 
+                    title : '图片',
+                    formatter: function(value, row, index) {
+                        // console.log(imageReg.test(row.image));
+                        if(imageReg.test(row.image)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.image;
+                            }else{
+                                url=ctx+row.image;
+                            }
+                            return $.table.imageView(url,600);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+                {
+                    field : 'carCount', 
+                    title : '库存',
+                    sortable: true
+                },
+                {
+                    field : 'sort', 
+                    title : '排序',
+                    visible: false
+                },
+                {
+                    field : 'engine',
+                    title : '发动机',
+                    sortable: true
+                },
+                {
+                    field : 'power', 
+                    title : '动力类型',
+                    sortable: true
+                },
+                {
+                    field : 'topSpeed', 
+                    title : '最高速度(km/h)',
+                    sortable: true
+                },
+                {
+                    field : 'lwh', 
+                    title : '长宽高(mm)',
+                    sortable: true
+                },
+                {
+                    field : 'acctime', 
+                    title : '0-100加速时间(s)',
+                    sortable: true
+                },
+                {
+                    field : 'fuelconsump', 
+                    title : '油耗(L/100km)',
+                    sortable: true,
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.crm.mapper.CrmCustomerMapper">
+    
+    <resultMap type="CrmCustomer" id="CrmCustomerResult">
+        <result property="id"    column="id"    />
+        <result property="loginName"    column="login_name"   />
+        <result property="pwd"     column="pwd"     />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="tel"    column="tel"    />
+        <result property="email"    column="email"    />
+        <result property="job"    column="job"    />
+        <result property="address"    column="address"    />
+        <result property="lastContactTime"    column="last_contact_time"    />
+        <result property="buycarNum"    column="buycar_num"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCrmCustomerVo">
+        select id,login_name,pwd,login_ip,login_date, name,sex,age, tel, email,job,address, last_contact_time,buycar_num, remark from crm_contacts where type='Y'
+    </sql>
+
+    <select id="selectCrmCustomerList" parameterType="CrmCustomer" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        <if test="sex != null and sex != ''">AND sex = #{sex}</if>
+        <if test="age != null and age != '' ">and age = #{age}</if>
+        <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+        <if test="email != null  and email != ''"> and email = #{email}</if>
+        <if test="job != null  and job != ''"> and job = #{job}</if>
+        <if test="address != null  and address != ''"> and address = #{address}</if>
+        <if test="lastContactTime != null "> and last_contact_time = #{lastContactTime}</if>
+        <if test="buycarNum != null and buycarNum != '' ">and buycar_num = #{buycarNum}</if>
+        <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+    </select>
+    
+    <select id="selectCrmCustomerById" parameterType="Long" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        and id = #{id}
+    </select>
+        
+    <insert id="insertCrmCustomer" parameterType="CrmCustomer" useGeneratedKeys="true" keyProperty="id">
+        insert into crm_contacts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="sex != null and sex != '' ">sex,</if>
+            <if test="age != null and age != '' ">age,</if>
+            <if test="tel != null  and tel != ''">tel,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="job != null  and job != ''">job,</if>
+            <if test="address != null  and address != ''">address,</if>
+            last_contact_time,
+            <if test="buycarNum != null and buycarNum != '' ">buycar_num,</if>
+            remark,
+            type,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="sex != null and sex != '' ">#{sex},</if>
+            <if test="age != null and age != '' ">#{age},</if>
+            <if test="tel != null  and tel != ''">#{tel},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="job != null  and job != ''">#{job},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            #{lastContactTime},
+            <if test="buycarNum != null and buycarNum != '' ">#{buycarNum},</if>
+            #{remark},
+            'Y',
+         </trim>
+    </insert>
+
+    <update id="updateCrmCustomer" parameterType="CrmCustomer">
+        update crm_contacts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="sex != null and sex != '' ">sex = #{sex},</if>
+            <if test="age != null and age != '' ">age = #{age},</if>
+            <if test="tel != null  and tel != ''">tel = #{tel},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="job != null  and job != ''">job = #{job},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            last_contact_time = #{lastContactTime},
+            <if test="buycarNum != null and buycarNum != '' ">buycar_num = #{buycarNum},</if>
+            remark = #{remark},
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCrmCustomerById" parameterType="Long">
+        delete from crm_contacts where id = #{id}
+    </delete>
+
+    <delete id="deleteCrmCustomerByIds" parameterType="String">
+        delete from crm_contacts where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>
