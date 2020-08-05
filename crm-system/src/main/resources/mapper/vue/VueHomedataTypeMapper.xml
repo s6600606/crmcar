@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueHomedataTypeMapper">
+    
+    <resultMap type="VueHomedataType" id="VueHomedataTypeResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectVueHomedataTypeVo">
+        select id, type from vue_homedata_type
+    </sql>
+
+    <select id="selectVueHomedataTypeList" parameterType="VueHomedataType" resultMap="VueHomedataTypeResult">
+        <include refid="selectVueHomedataTypeVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueHomedataTypeById" parameterType="Long" resultMap="VueHomedataTypeResult">
+        <include refid="selectVueHomedataTypeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueHomedataType" parameterType="VueHomedataType" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_homedata_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueHomedataType" parameterType="VueHomedataType">
+        update vue_homedata_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueHomedataTypeById" parameterType="Long">
+        delete from vue_homedata_type where id = #{id}
+    </delete>
+
+    <delete id="deleteVueHomedataTypeByIds" parameterType="String">
+        delete from vue_homedata_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

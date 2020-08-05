@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueDetIteminfoMapper">
+    
+    <resultMap type="VueDetIteminfo" id="VueDetIteminfoResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="descl"    column="descl"    />
+        <result property="price"    column="price"    />
+        <result property="oldPrice"    column="oldPrice"    />
+        <result property="discountDesc"    column="discountDesc"    />
+        <result property="highNowPrice"    column="highNowPrice"    />
+        <result property="topImages"    column="topImages"    />
+    </resultMap>
+
+    <sql id="selectVueDetIteminfoVo">
+        select id, title, descl, price, oldPrice, discountDesc, highNowPrice, topImages from vue_det_iteminfo
+    </sql>
+
+    <select id="selectVueDetIteminfoList" parameterType="VueDetIteminfo" resultMap="VueDetIteminfoResult">
+        <include refid="selectVueDetIteminfoVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="descl != null  and descl != ''"> and descl = #{descl}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="oldPrice != null "> and oldPrice = #{oldPrice}</if>
+            <if test="discountDesc != null  and discountDesc != ''"> and discountDesc = #{discountDesc}</if>
+            <if test="highNowPrice != null "> and highNowPrice = #{highNowPrice}</if>
+            <if test="topImages != null  and topImages != ''"> and topImages = #{topImages}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueDetIteminfoById" parameterType="Long" resultMap="VueDetIteminfoResult">
+        <include refid="selectVueDetIteminfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueDetIteminfo" parameterType="VueDetIteminfo" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_det_iteminfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="descl != null">descl,</if>
+            <if test="price != null">price,</if>
+            <if test="oldPrice != null">oldPrice,</if>
+            <if test="discountDesc != null">discountDesc,</if>
+            <if test="highNowPrice != null">highNowPrice,</if>
+            <if test="topImages != null">topImages,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="descl != null">#{descl},</if>
+            <if test="price != null">#{price},</if>
+            <if test="oldPrice != null">#{oldPrice},</if>
+            <if test="discountDesc != null">#{discountDesc},</if>
+            <if test="highNowPrice != null">#{highNowPrice},</if>
+            <if test="topImages != null">#{topImages},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueDetIteminfo" parameterType="VueDetIteminfo">
+        update vue_det_iteminfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="descl != null">descl = #{descl},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="oldPrice != null">oldPrice = #{oldPrice},</if>
+            <if test="discountDesc != null">discountDesc = #{discountDesc},</if>
+            <if test="highNowPrice != null">highNowPrice = #{highNowPrice},</if>
+            <if test="topImages != null">topImages = #{topImages},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueDetIteminfoById" parameterType="Long">
+        delete from vue_det_iteminfo where id = #{id}
+    </delete>
+
+    <delete id="deleteVueDetIteminfoByIds" parameterType="String">
+        delete from vue_det_iteminfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

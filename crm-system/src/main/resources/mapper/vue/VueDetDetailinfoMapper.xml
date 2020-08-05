@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueDetDetailinfoMapper">
+    
+    <resultMap type="VueDetDetailinfo" id="VueDetDetailinfoResult">
+        <result property="id"    column="id"    />
+        <result property="detailinfoId"    column="detailInfo_id"    />
+        <result property="descl"    column="descl"    />
+        <result property="detailImage"    column="detailImage"    />
+    </resultMap>
+
+    <sql id="selectVueDetDetailinfoVo">
+        select id, detailInfo_id, descl, detailImage from vue_det_detailinfo
+    </sql>
+
+    <select id="selectVueDetDetailinfoList" parameterType="VueDetDetailinfo" resultMap="VueDetDetailinfoResult">
+        <include refid="selectVueDetDetailinfoVo"/>
+        <where>  
+            <if test="detailinfoId != null "> and detailInfo_id = #{detailinfoId}</if>
+            <if test="descl != null  and descl != ''"> and descl = #{descl}</if>
+            <if test="detailImage != null  and detailImage != ''"> and detailImage = #{detailImage}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueDetDetailinfoById" parameterType="Long" resultMap="VueDetDetailinfoResult">
+        <include refid="selectVueDetDetailinfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueDetDetailinfo" parameterType="VueDetDetailinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_det_detailinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="detailinfoId != null">detailInfo_id,</if>
+            <if test="descl != null">descl,</if>
+            <if test="detailImage != null">detailImage,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="detailinfoId != null">#{detailinfoId},</if>
+            <if test="descl != null">#{descl},</if>
+            <if test="detailImage != null">#{detailImage},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueDetDetailinfo" parameterType="VueDetDetailinfo">
+        update vue_det_detailinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="detailinfoId != null">detailInfo_id = #{detailinfoId},</if>
+            <if test="descl != null">descl = #{descl},</if>
+            <if test="detailImage != null">detailImage = #{detailImage},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueDetDetailinfoById" parameterType="Long">
+        delete from vue_det_detailinfo where id = #{id}
+    </delete>
+
+    <delete id="deleteVueDetDetailinfoByIds" parameterType="String">
+        delete from vue_det_detailinfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

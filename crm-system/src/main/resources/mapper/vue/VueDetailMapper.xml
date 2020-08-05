@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueDetailMapper">
+    
+    <resultMap type="VueDetail" id="VueDetailResult">
+        <result property="iid"    column="iid"    />
+        <result property="iteminfoId"    column="itemInfo_id"    />
+        <result property="shopinfoId"    column="shopInfo_id"    />
+        <result property="detailinfoId"    column="detailInfo_id"    />
+        <result property="itemparamsId"    column="itemParams_id"    />
+        <result property="rateId"    column="rate_id"    />
+    </resultMap>
+
+    <sql id="selectVueDetailVo">
+        select iid, itemInfo_id, shopInfo_id, detailInfo_id, itemParams_id, rate_id from vue_detail
+    </sql>
+
+    <select id="selectVueDetailList" parameterType="VueDetail" resultMap="VueDetailResult">
+        <include refid="selectVueDetailVo"/>
+        <where>  
+            <if test="iteminfoId != null "> and itemInfo_id = #{iteminfoId}</if>
+            <if test="shopinfoId != null "> and shopInfo_id = #{shopinfoId}</if>
+            <if test="detailinfoId != null "> and detailInfo_id = #{detailinfoId}</if>
+            <if test="itemparamsId != null "> and itemParams_id = #{itemparamsId}</if>
+            <if test="rateId != null "> and rate_id = #{rateId}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueDetailById" parameterType="Long" resultMap="VueDetailResult">
+        <include refid="selectVueDetailVo"/>
+        where iid = #{iid}
+    </select>
+        
+    <insert id="insertVueDetail" parameterType="VueDetail" useGeneratedKeys="true" keyProperty="iid">
+        insert into vue_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="iteminfoId != null">itemInfo_id,</if>
+            <if test="shopinfoId != null">shopInfo_id,</if>
+            <if test="detailinfoId != null">detailInfo_id,</if>
+            <if test="itemparamsId != null">itemParams_id,</if>
+            <if test="rateId != null">rate_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="iteminfoId != null">#{iteminfoId},</if>
+            <if test="shopinfoId != null">#{shopinfoId},</if>
+            <if test="detailinfoId != null">#{detailinfoId},</if>
+            <if test="itemparamsId != null">#{itemparamsId},</if>
+            <if test="rateId != null">#{rateId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueDetail" parameterType="VueDetail">
+        update vue_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="iteminfoId != null">itemInfo_id = #{iteminfoId},</if>
+            <if test="shopinfoId != null">shopInfo_id = #{shopinfoId},</if>
+            <if test="detailinfoId != null">detailInfo_id = #{detailinfoId},</if>
+            <if test="itemparamsId != null">itemParams_id = #{itemparamsId},</if>
+            <if test="rateId != null">rate_id = #{rateId},</if>
+        </trim>
+        where iid = #{iid}
+    </update>
+
+    <delete id="deleteVueDetailById" parameterType="Long">
+        delete from vue_detail where iid = #{iid}
+    </delete>
+
+    <delete id="deleteVueDetailByIds" parameterType="String">
+        delete from vue_detail where iid in 
+        <foreach item="iid" collection="array" open="(" separator="," close=")">
+            #{iid}
+        </foreach>
+    </delete>
+
+</mapper>

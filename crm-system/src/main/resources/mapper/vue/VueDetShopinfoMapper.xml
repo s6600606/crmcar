@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueDetShopinfoMapper">
+    
+    <resultMap type="VueDetShopinfo" id="VueDetShopinfoResult">
+        <result property="id"    column="id"    />
+        <result property="services"    column="services"    />
+        <result property="shopLogo"    column="shopLogo"    />
+        <result property="name"    column="name"    />
+        <result property="cFans"    column="cFans"    />
+        <result property="cSells"    column="cSells"    />
+        <result property="score"    column="score"    />
+        <result property="cGoods"    column="cGoods"    />
+    </resultMap>
+
+    <sql id="selectVueDetShopinfoVo">
+        select id, services, shopLogo, name, cFans, cSells, score, cGoods from vue_det_shopinfo
+    </sql>
+
+    <select id="selectVueDetShopinfoList" parameterType="VueDetShopinfo" resultMap="VueDetShopinfoResult">
+        <include refid="selectVueDetShopinfoVo"/>
+        <where>  
+            <if test="services != null  and services != ''"> and services = #{services}</if>
+            <if test="shopLogo != null  and shopLogo != ''"> and shopLogo = #{shopLogo}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="cFans != null  and cFans != ''"> and cFans = #{cFans}</if>
+            <if test="cSells != null  and cSells != ''"> and cSells = #{cSells}</if>
+            <if test="score != null  and score != ''"> and score = #{score}</if>
+            <if test="cGoods != null  and cGoods != ''"> and cGoods = #{cGoods}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueDetShopinfoById" parameterType="Long" resultMap="VueDetShopinfoResult">
+        <include refid="selectVueDetShopinfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueDetShopinfo" parameterType="VueDetShopinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_det_shopinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="services != null">services,</if>
+            <if test="shopLogo != null">shopLogo,</if>
+            <if test="name != null">name,</if>
+            <if test="cFans != null">cFans,</if>
+            <if test="cSells != null">cSells,</if>
+            <if test="score != null">score,</if>
+            <if test="cGoods != null">cGoods,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="services != null">#{services},</if>
+            <if test="shopLogo != null">#{shopLogo},</if>
+            <if test="name != null">#{name},</if>
+            <if test="cFans != null">#{cFans},</if>
+            <if test="cSells != null">#{cSells},</if>
+            <if test="score != null">#{score},</if>
+            <if test="cGoods != null">#{cGoods},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueDetShopinfo" parameterType="VueDetShopinfo">
+        update vue_det_shopinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="services != null">services = #{services},</if>
+            <if test="shopLogo != null">shopLogo = #{shopLogo},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="cFans != null">cFans = #{cFans},</if>
+            <if test="cSells != null">cSells = #{cSells},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="cGoods != null">cGoods = #{cGoods},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueDetShopinfoById" parameterType="Long">
+        delete from vue_det_shopinfo where id = #{id}
+    </delete>
+
+    <delete id="deleteVueDetShopinfoByIds" parameterType="String">
+        delete from vue_det_shopinfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

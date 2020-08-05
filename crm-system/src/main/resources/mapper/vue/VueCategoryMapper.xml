@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueCategoryMapper">
+    
+    <resultMap type="VueCategory" id="VueCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="title"    column="title"    />
+        <result property="maitKey"    column="maitKey"    />
+        <result property="miniWallkey"    column="miniWallkey"    />
+    </resultMap>
+
+    <sql id="selectVueCategoryVo">
+        select id, type_id, title, maitKey, miniWallkey from vue_category
+    </sql>
+
+    <select id="selectVueCategoryList" parameterType="VueCategory" resultMap="VueCategoryResult">
+        <include refid="selectVueCategoryVo"/>
+        <where>  
+            <if test="typeId != null "> and type_id = #{typeId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="maitKey != null  and maitKey != ''"> and maitKey = #{maitKey}</if>
+            <if test="miniWallkey != null  and miniWallkey != ''"> and miniWallkey = #{miniWallkey}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueCategoryById" parameterType="Long" resultMap="VueCategoryResult">
+        <include refid="selectVueCategoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueCategory" parameterType="VueCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">type_id,</if>
+            <if test="title != null">title,</if>
+            <if test="maitKey != null">maitKey,</if>
+            <if test="miniWallkey != null">miniWallkey,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">#{typeId},</if>
+            <if test="title != null">#{title},</if>
+            <if test="maitKey != null">#{maitKey},</if>
+            <if test="miniWallkey != null">#{miniWallkey},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueCategory" parameterType="VueCategory">
+        update vue_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeId != null">type_id = #{typeId},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="maitKey != null">maitKey = #{maitKey},</if>
+            <if test="miniWallkey != null">miniWallkey = #{miniWallkey},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueCategoryById" parameterType="Long">
+        delete from vue_category where id = #{id}
+    </delete>
+
+    <delete id="deleteVueCategoryByIds" parameterType="String">
+        delete from vue_category where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

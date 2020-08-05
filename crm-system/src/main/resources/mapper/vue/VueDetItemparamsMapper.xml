@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueDetItemparamsMapper">
+    
+    <resultMap type="VueDetItemparams" id="VueDetItemparamsResult">
+        <result property="id"    column="id"    />
+        <result property="info"    column="info"    />
+        <result property="rule"    column="rule"    />
+        <result property="images"    column="images"    />
+        <result property="set"    column="set"    />
+        <result property="tables"    column="tables"    />
+    </resultMap>
+
+    <sql id="selectVueDetItemparamsVo">
+        select id, info, rule from vue_det_itemparams
+    </sql>
+    <select id="ListVueDetItemparams" parameterType="Long" resultMap="VueDetItemparamsResult">
+        SELECT itp.*,itpi.images,itpi.`set`,itpr.`tables` from vue_det_itemparams itp, vue_det_itemparams_info itpi, vue_det_itemparams_rule itpr
+        WHERE itp.info=itpi.id and itp.rule=itpr.id
+    </select>
+    <select id="selectVueDetItemparamsList" parameterType="VueDetItemparams" resultMap="VueDetItemparamsResult">
+        <include refid="selectVueDetItemparamsVo"/>
+        <where>  
+            <if test="info != null  and info != ''"> and info = #{info}</if>
+            <if test="rule != null  and rule != ''"> and rule = #{rule}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueDetItemparamsById" parameterType="Long" resultMap="VueDetItemparamsResult">
+        <include refid="selectVueDetItemparamsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueDetItemparams" parameterType="VueDetItemparams" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_det_itemparams
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="info != null">info,</if>
+            <if test="rule != null">rule,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="info != null">#{info},</if>
+            <if test="rule != null">#{rule},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueDetItemparams" parameterType="VueDetItemparams">
+        update vue_det_itemparams
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="info != null">info = #{info},</if>
+            <if test="rule != null">rule = #{rule},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueDetItemparamsById" parameterType="Long">
+        delete from vue_det_itemparams where id = #{id}
+    </delete>
+
+    <delete id="deleteVueDetItemparamsByIds" parameterType="String">
+        delete from vue_det_itemparams where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

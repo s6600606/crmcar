@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueApiMapper">
+    
+    <resultMap type="VueHomedata" id="VueHomedataResult">
+        <result property="id"    column="id"    />
+        <result property="iid"    column="iid"    />
+        <result property="miniWallkey"    column="miniWallkey"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="img"    column="img"    />
+        <result property="price"    column="price"    />
+        <result property="cfav"    column="cfav"    />
+        <result property="title"    column="title"    />
+        <result property="type"    column="type"    />
+        <result property="page"    column="page"    />
+        <result property="page1"    column="page1"    />
+        <result property="page10"    column="page10"    />
+    </resultMap>
+
+    <sql id="selectVueHomedataVo">
+        select id, iid, type_id, img, price, cfav, title from vue_homedata
+    </sql>
+
+    <select id="ListHomedata" parameterType="VueHomedata" resultMap="VueHomedataResult">
+        select h.iid, h.img, h.price, h.cfav, h.title,h.miniWallkey from vue_homedata h ,vue_homedata_type t
+        <where>
+            t.id=h.type_id
+            <if test="type != null "> and type = #{type}</if>
+            <if test="miniWallkey != null "> and miniWallkey = #{miniWallkey}</if>
+        </where>
+        <if test="page != null ">
+        LIMIT 0,#{page10}
+        </if>
+    </select>
+
+
+
+</mapper>

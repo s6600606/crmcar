@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueCatSubcategoryMapper">
+    
+    <resultMap type="VueCatSubcategory" id="VueCatSubcategoryResult">
+        <result property="id"    column="id"    />
+        <result property="mailKey"    column="mailKey"    />
+        <result property="image"    column="image"    />
+        <result property="title"    column="title"    />
+    </resultMap>
+
+    <sql id="selectVueCatSubcategoryVo">
+        select id, mailKey, image, title from vue_cat_subcategory
+    </sql>
+
+    <select id="selectVueCatSubcategoryList" parameterType="VueCatSubcategory" resultMap="VueCatSubcategoryResult">
+        <include refid="selectVueCatSubcategoryVo"/>
+        <where>  
+            <if test="mailKey != null  and mailKey != ''"> and mailKey = #{mailKey}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueCatSubcategoryById" parameterType="Long" resultMap="VueCatSubcategoryResult">
+        <include refid="selectVueCatSubcategoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueCatSubcategory" parameterType="VueCatSubcategory" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_cat_subcategory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mailKey != null">mailKey,</if>
+            <if test="image != null">image,</if>
+            <if test="title != null">title,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mailKey != null">#{mailKey},</if>
+            <if test="image != null">#{image},</if>
+            <if test="title != null">#{title},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueCatSubcategory" parameterType="VueCatSubcategory">
+        update vue_cat_subcategory
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mailKey != null">mailKey = #{mailKey},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="title != null">title = #{title},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueCatSubcategoryById" parameterType="Long">
+        delete from vue_cat_subcategory where id = #{id}
+    </delete>
+
+    <delete id="deleteVueCatSubcategoryByIds" parameterType="String">
+        delete from vue_cat_subcategory where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

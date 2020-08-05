@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueDetRateMapper">
+    
+    <resultMap type="VueDetRate" id="VueDetRateResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="content"    column="content"    />
+        <result property="created"    column="created"    />
+        <result property="showDate"    column="showDate"    />
+        <result property="style"    column="style"    />
+        <result property="images"    column="images"    />
+    </resultMap>
+
+    <sql id="selectVueDetRateVo">
+        select id, user_id, content, created, showDate, style, images from vue_det_rate
+    </sql>
+
+    <select id="selectVueDetRateList" parameterType="VueDetRate" resultMap="VueDetRateResult">
+        <include refid="selectVueDetRateVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="created != null "> and created = #{created}</if>
+            <if test="showDate != null "> and showDate = #{showDate}</if>
+            <if test="style != null  and style != ''"> and style = #{style}</if>
+            <if test="images != null  and images != ''"> and images = #{images}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueDetRateById" parameterType="Long" resultMap="VueDetRateResult">
+        <include refid="selectVueDetRateVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueDetRate" parameterType="VueDetRate" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_det_rate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="content != null">content,</if>
+            <if test="created != null">created,</if>
+            <if test="showDate != null">showDate,</if>
+            <if test="style != null">style,</if>
+            <if test="images != null">images,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="created != null">#{created},</if>
+            <if test="showDate != null">#{showDate},</if>
+            <if test="style != null">#{style},</if>
+            <if test="images != null">#{images},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueDetRate" parameterType="VueDetRate">
+        update vue_det_rate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="created != null">created = #{created},</if>
+            <if test="showDate != null">showDate = #{showDate},</if>
+            <if test="style != null">style = #{style},</if>
+            <if test="images != null">images = #{images},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueDetRateById" parameterType="Long">
+        delete from vue_det_rate where id = #{id}
+    </delete>
+
+    <delete id="deleteVueDetRateByIds" parameterType="String">
+        delete from vue_det_rate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

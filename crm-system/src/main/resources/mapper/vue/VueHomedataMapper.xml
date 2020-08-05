@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.vue.mapper.VueHomedataMapper">
+    
+    <resultMap type="VueHomedata" id="VueHomedataResult">
+        <result property="id"    column="id"    />
+        <result property="iid"    column="iid"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="img"    column="img"    />
+        <result property="price"    column="price"    />
+        <result property="cfav"    column="cfav"    />
+        <result property="title"    column="title"    />
+        <result property="type"    column="type"    />
+        <result property="page"    column="page"    />
+    </resultMap>
+
+    <sql id="selectVueHomedataVo">
+        select id, iid, type_id, img, price, cfav, title from vue_homedata
+    </sql>
+
+
+    <select id="selectVueHomedataList" parameterType="VueHomedata" resultMap="VueHomedataResult">
+        <include refid="selectVueHomedataVo"/>
+        <where>
+            <if test="iid != null "> and iid = #{iid}</if>
+            <if test="typeId != null "> and type_id = #{typeId}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="cfav != null  and cfav != ''"> and cfav = #{cfav}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+    
+    <select id="selectVueHomedataById" parameterType="Long" resultMap="VueHomedataResult">
+        <include refid="selectVueHomedataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertVueHomedata" parameterType="VueHomedata" useGeneratedKeys="true" keyProperty="id">
+        insert into vue_homedata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="iid != null">iid,</if>
+            <if test="typeId != null">type_id,</if>
+            <if test="img != null">img,</if>
+            <if test="price != null">price,</if>
+            <if test="cfav != null">cfav,</if>
+            <if test="title != null">title,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="iid != null">#{iid},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="img != null">#{img},</if>
+            <if test="price != null">#{price},</if>
+            <if test="cfav != null">#{cfav},</if>
+            <if test="title != null">#{title},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVueHomedata" parameterType="VueHomedata">
+        update vue_homedata
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="iid != null">iid = #{iid},</if>
+            <if test="typeId != null">type_id = #{typeId},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="cfav != null">cfav = #{cfav},</if>
+            <if test="title != null">title = #{title},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVueHomedataById" parameterType="Long">
+        delete from vue_homedata where id = #{id}
+    </delete>
+
+    <delete id="deleteVueHomedataByIds" parameterType="String">
+        delete from vue_homedata where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
